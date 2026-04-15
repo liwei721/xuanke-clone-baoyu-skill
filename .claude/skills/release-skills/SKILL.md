@@ -27,22 +27,25 @@ Just run `/release-skills` - auto-detects your project configuration.
 
 ## Hermes Agent Setup
 
-Use either approach:
+Hermes does **not** load the whole git repo as one skill: it looks for `**/SKILL.md` under configured roots. This repo keeps plugin skills under `skills/baoyu-*` and agent skills under `.claude/skills/*`. Cloning the repo to `~/.hermes/skills/baoyu` leaves skills **nested** (`baoyu/skills/baoyu-imagine/...`), which often does not match Hermes’s expected layout—use `external_dirs` or copy per skill. See [docs/hermes-skills.md](../../../docs/hermes-skills.md).
 
-1. **External skill directory (recommended)**: add this folder to Hermes external dirs:
+1. **External dirs (recommended)** — point at the **inner** folders that contain each skill’s `SKILL.md`:
 
 ```yaml
 # ~/.hermes/config.yaml
 skills:
   external_dirs:
+    - /ABS/PATH/TO/baoyu-skills/skills
     - /ABS/PATH/TO/baoyu-skills/.claude/skills
 ```
 
 Then run `/release-skills` in Hermes.
 
-2. **Copy to local Hermes skills dir**:
-   - Copy `.claude/skills/release-skills` to `~/.hermes/skills/release-skills/`
-   - Then run `/release-skills`
+2. **Copy into `~/.hermes/skills/<category>/release-skills/`** (not the repo root):
+
+   - Copy `.claude/skills/release-skills` so you have `~/.hermes/skills/devops/release-skills/SKILL.md` (category name is arbitrary).
+
+**If the skill does not appear**: this skill declares `requires_toolsets: [terminal]`. Hermes hides it when the `terminal` toolset is not enabled for the session—enable it, or strip that block in a local copy.
 
 ## Supported Projects
 
